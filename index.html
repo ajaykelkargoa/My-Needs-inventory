@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Understanding Your Needs - A Coaching Reflection Tool</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.7;
+            color: #2d3748;
+            background: #fafbfc;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #e8f4f8 0%, #d1ecf1 100%);
+            color: #2d3748;
+            padding: 80px 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 2.8rem;
+            font-weight: 400;
+            margin-bottom: 20px;
+            line-height: 1.3;
+            color: #1a365d;
+        }
+
+        .hero .subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 35px;
+            color: #4a5568;
+            font-weight: 300;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: #3182ce;
+            color: white;
+            padding: 16px 32px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            margin: 0 10px 10px 0;
+            box-shadow: 0 2px 8px rgba(49, 130, 206, 0.2);
+        }
+
+        .cta-button:hover {
+            background: #2c5282;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(49, 130, 206, 0.3);
+        }
+
+        .cta-secondary {
+            background: transparent;
+            color: #3182ce;
+            border: 2px solid #3182ce;
+            box-shadow: none;
+        }
+
+        .cta-secondary:hover {
+            background: #3182ce;
+            color: white;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .section {
+            padding: 60px 0;
+        }
+
+        .section:nth-child(even) {
+            background: white;
+        }
+
+        .why-section {
+            text-align: center;
+            padding: 70px 0;
+            background: white;
+        }
+
+        .why-section h2 {
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+            color: #1a365d;
+            font-weight: 400;
+        }
+
+        .why-section .subtitle {
+            font-size: 1.1rem;
+            color: #4a5568;
+            margin-bottom: 50px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            font-weight: 300;
+        }
+
+        .insights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 40px;
+            margin: 50px 0;
+        }
+
+        .insight {
+            text-align: center;
+            padding: 30px 20px;
+            background: #f7fafc;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .insight .icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 20px;
+            background: #e8f4f8;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: #3182ce;
+        }
+
+        .insight h4 {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            color: #1a365d;
+            font-weight: 500;
+        }
+
+        .insight p {
+            color: #4a5568;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .research-callout {
+            background: #f0f9ff;
+            padding: 50px 40px;
+            border-radius: 16px;
+            text-align: center;
+            margin: 50px 0;
+            border-left: 4px solid #3182ce;
+        }
+
+        .research-callout h3 {
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            font-weight: 500;
+            color: #1a365d;
+        }
+
+        .research-callout p {
+            font-size: 1.05rem;
+            color: #4a5568;
+            margin-bottom: 25px;
+            font-style: italic;
+        }
+
+        .research-callout .cta-button {
+            background: #3182ce;
+            color: white;
+            margin-top: 10px;
+        }
+
+        .journey-section {
+            background: #f7fafc;
+            padding: 70px 0;
+        }
+
+        .journey-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .journey-phase {
+            background: white;
+            padding: 30px 25px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            border: 1px solid #e2e8f0;
+        }
+
+        .phase-number {
+            background: #e8f4f8;
+            color: #3182ce;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            margin: 0 auto 20px;
+            font-size: 1.1rem;
+        }
+
+        .journey-phase h4 {
+            font-size: 1rem;
+            margin-bottom: 12px;
+            color: #1a365d;
+            font-weight: 500;
+        }
+
+        .journey-phase p {
+            color: #4a5568;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .final-invitation {
+            background: #1a365d;
+            color: white;
+            padding: 70px 0;
+            text-align: center;
+        }
+
+        .final-invitation h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            font-weight: 400;
+        }
+
+        .final-invitation p {
+            font-size: 1.1rem;
+            margin-bottom: 35px;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        .final-invitation .cta-button {
+            background: #3182ce;
+            color: white;
+            font-size: 1.1rem;
+            padding: 18px 36px;
+        }
+
+        .final-invitation .cta-button:hover {
+            background: #2c5282;
+        }
+
+        .gentle-note {
+            background: #f0f9ff;
+            padding: 30px;
+            border-radius: 12px;
+            margin: 40px 0;
+            border-left: 4px solid #3182ce;
+        }
+
+        .gentle-note p {
+            color: #4a5568;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .hero .subtitle {
+                font-size: 1rem;
+            }
+
+            .cta-button {
+                display: block;
+                margin: 10px auto;
+                text-align: center;
+                max-width: 280px;
+            }
+
+            .insights-grid,
+            .journey-grid {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+
+            .research-callout,
+            .gentle-note {
+                padding: 30px 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Understanding Your Needs</h1>
+            <p class="subtitle">You might already sense what matters to you. This simple tool helps you notice patterns in your daily experience that could deepen your self-awareness.</p>
+            <a href="./tool.html" class="cta-button">Explore the Tool</a>
+            <a href="#reflection" class="cta-button cta-secondary">Learn More</a>
+        </div>
+    </section>
+
+    <!-- Reflection Section -->
+    <section class="why-section" id="reflection">
+        <div class="container">
+            <h2>Why This Reflection Might Be Helpful</h2>
+            <p class="subtitle">Sometimes what we think we need and what's actually showing up in our daily experience are different things. This awareness can be valuable for leadership development.</p>
+
+            <div class="insights-grid">
+                <div class="insight">
+                    <div class="icon">💡</div>
+                    <h4>Pattern Recognition</h4>
+                    <p>Notice which needs consistently appear in your experience, revealing what truly drives your decisions.</p>
+                </div>
+                <div class="insight">
+                    <div class="icon">🎯</div>
+                    <h4>Authentic Leadership</h4>
+                    <p>Understanding your needs helps you lead from a place of clarity rather than reactive patterns.</p>
+                </div>
+                <div class="insight">
+                    <div class="icon">⚖️</div>
+                    <h4>Sustainable Pace</h4>
+                    <p>Awareness of your needs can help prevent burnout and support long-term effectiveness.</p>
+                </div>
+                <div class="insight">
+                    <div class="icon">🤝</div>
+                    <h4>Coaching Conversations</h4>
+                    <p>Rich data for exploring themes and patterns with your coach or in self-reflection.</p>
+                </div>
+            </div>
+
+            <div class="research-callout">
+                <h3>Research Insight</h3>
+                <p>"The most compassionate people had boundaries of steel. Self-compassion is actually the core of mental toughness."</p>
+                <cite style="font-size: 0.9rem; color: #4a5568;">— Dr. Brené Brown's research findings</cite>
+                <br>
+                <a href="./tool.html" class="cta-button">Try the Reflection Tool</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Journey Section -->
+    <section class="journey-section">
+        <div class="container">
+            <h2 style="text-align: center; margin-bottom: 20px; font-weight: 400; color: #1a365d; font-size: 2rem;">What You Might Notice</h2>
+            <p style="text-align: center; color: #4a5568; margin-bottom: 40px; max-width: 600px; margin-left: auto; margin-right: auto;">Everyone's experience is different, but here's what some people observe when they track their needs consistently:</p>
+            
+            <div class="journey-grid">
+                <div class="journey-phase">
+                    <div class="phase-number">1-3</div>
+                    <h4>First Few Days</h4>
+                    <p>You might start noticing needs you hadn't consciously recognized before. This can feel surprising or relieving.</p>
+                </div>
+                <div class="journey-phase">
+                    <div class="phase-number">1</div>
+                    <h4>After One Week</h4>
+                    <p>Patterns may begin to emerge. You might see themes in your data that weren't obvious before.</p>
+                </div>
+                <div class="journey-phase">
+                    <div class="phase-number">2</div>
+                    <h4>After Two Weeks</h4>
+                    <p>Decision-making might feel clearer as you become more aware of what you're optimizing for.</p>
+                </div>
+                <div class="journey-phase">
+                    <div class="phase-number">3+</div>
+                    <h4>Ongoing Practice</h4>
+                    <p>Needs awareness could become a natural part of your reflection and decision-making process.</p>
+                </div>
+            </div>
+
+            <div class="gentle-note">
+                <p><strong>A gentle note:</strong> There's no "right" way to use this tool. Some people find daily tracking helpful, others prefer to use it when they're feeling stuck or curious. Trust your own rhythm and what feels sustainable for you.</p>
+            </div>
+
+            <div style="text-align: center; margin-top: 40px;">
+                <a href="./tool.html" class="cta-button">Begin if You're Curious</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final Invitation -->
+    <section class="final-invitation">
+        <div class="container">
+            <h2>An Invitation to Explore</h2>
+            <p>If you're curious about what drives your decisions and patterns, this tool might offer some insights. It takes about 30 seconds per day and requires no commitment beyond your own curiosity.</p>
+            <a href="./tool.html" class="cta-button">Start Your Exploration</a>
+        </div>
+    </section>
+
+    <script>
+        // Smooth scrolling for internal links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Gentle fade-in animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -30px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe elements for gentle animations
+        document.querySelectorAll('.insight, .journey-phase').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(15px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+
+        // Track interactions for understanding usage patterns
+        document.querySelectorAll('a[href*="tool.html"]').forEach(button => {
+            button.addEventListener('click', function() {
+                // Could integrate with analytics if needed
+                console.log('Tool access from:', this.closest('section').className || 'unknown location');
+            });
+        });
+    </script>
+</body>
+</html>
