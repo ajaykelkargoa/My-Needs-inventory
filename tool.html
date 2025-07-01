@@ -4,282 +4,133 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Needs Reflection Tool</title>
-  <script src="https://cdn.jsdelivr.net/npm/wordcloud@1.2.2/src/wordcloud2.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/wordcloud@1.1.2/src/wordcloud2.min.js"></script>
   <style>
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: #f9fbfc;
-      margin: 0;
-      padding: 20px;
-      color: #2d3748;
-    }
-    .container {
-      background: white;
-      padding: 30px;
-      border-radius: 16px;
-      max-width: 960px;
-      margin: 0 auto;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.06);
-    }
-    h1 {
-      text-align: center;
-      margin-bottom: 12px;
-      font-size: 2rem;
-      font-weight: 500;
-      color: #1a365d;
-    }
-    .subtitle {
-      text-align: center;
-      margin-bottom: 30px;
-      font-weight: 300;
-      color: #4a5568;
-      font-size: 1.1rem;
-    }
-    label {
-      display: block;
-      margin: 20px 0 8px;
-      font-weight: 500;
-      color: #2d3748;
-    }
-    textarea {
-      width: 100%;
-      height: 120px;
-      padding: 12px;
-      border-radius: 10px;
-      border: 1px solid #cbd5e0;
-      font-size: 1rem;
-      resize: vertical;
-      box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
-    }
-    .category {
-      margin-top: 30px;
-    }
-    .category h3 {
-      margin-bottom: 10px;
-      font-size: 1rem;
-      color: #2c5282;
-      border-left: 4px solid #3182ce;
-      padding-left: 10px;
-      font-weight: 600;
-    }
-    .needs-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-    .needs-grid label {
-      font-weight: normal;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.95rem;
-      background: #edf2f7;
-      padding: 6px 10px;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-    .submit-button {
-      margin-top: 40px;
-      display: block;
-      width: 100%;
-      padding: 14px;
-      background: #3182ce;
-      color: white;
-      font-size: 1.1rem;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-    .submit-button:hover {
-      background: #2c5282;
-    }
-    .filters {
-      margin-top: 30px;
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-    .filters button {
-      padding: 6px 12px;
-      border: 1px solid #3182ce;
-      border-radius: 6px;
-      background: white;
-      color: #3182ce;
-      cursor: pointer;
-    }
-    .filters button.active {
-      background: #3182ce;
-      color: white;
-    }
-    #wordCloud {
-      width: 100%;
-      height: 300px;
-      margin: 30px 0;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
-    th, td {
-      border: 1px solid #e2e8f0;
-      padding: 10px;
-      text-align: left;
-    }
-    th {
-      background: #edf2f7;
-    }
-    @media (max-width: 600px) {
-      textarea {
-        height: 100px;
-      }
-      .needs-grid {
-        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-      }
-      .submit-button {
-        font-size: 1rem;
-        padding: 12px;
-      }
-    }
+    /* [Your full CSS from canvas here] */
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>Needs Reflection</h1>
-    <p class="subtitle">Reflect on your day and notice the emotional needs that showed up.</p>
+    <div class="card">
+      <h1>Needs Reflection Tool</h1>
+      <p>Write a short reflection about your experience today:</p>
+      <textarea id="reflectionInput" placeholder="Today I felt..."></textarea>
+      <h2 class="section-title">What needs were present or unmet?</h2>
+      <div id="needsChecklist"></div>
+      <button onclick="saveReflection()">Submit Reflection</button>
+    </div>
 
-    <label for="reflection">📝 What came up for you today?</label>
-    <textarea id="reflection" placeholder="Write your thoughts here..."></textarea>
-
-    <div class="category">
-      <h3>Connection</h3>
-      <div class="needs-grid">
-        <label><input type="checkbox" value="Belonging" /> Belonging</label>
-        <label><input type="checkbox" value="Community" /> Community</label>
-        <label><input type="checkbox" value="Compassion" /> Compassion</label>
-        <label><input type="checkbox" value="Love" /> Love</label>
-        <label><input type="checkbox" value="Trust" /> Trust</label>
-        <label><input type="checkbox" value="Understanding" /> Understanding</label>
+    <div class="card">
+      <h2 class="section-title">Date Filters</h2>
+      <div id="filters">
+        <button onclick="filterByDays(7)">Last 7 Days</button>
+        <button onclick="filterByDays(30)">Last 30 Days</button>
+        <button onclick="filterByDays(9999)">All</button>
       </div>
     </div>
 
-    <div class="category">
-      <h3>Autonomy</h3>
-      <div class="needs-grid">
-        <label><input type="checkbox" value="Freedom" /> Freedom</label>
-        <label><input type="checkbox" value="Choice" /> Choice</label>
-        <label><input type="checkbox" value="Independence" /> Independence</label>
-        <label><input type="checkbox" value="Self-Expression" /> Self-Expression</label>
-        <label><input type="checkbox" value="Space" /> Space</label>
-        <label><input type="checkbox" value="Clarity" /> Clarity</label>
-      </div>
+    <div class="card">
+      <h2 class="section-title">Needs Word Cloud (Live Summary)</h2>
+      <div id="wordCloud">No data yet.</div>
     </div>
 
-    <div class="category">
-      <h3>Meaning</h3>
-      <div class="needs-grid">
-        <label><input type="checkbox" value="Purpose" /> Purpose</label>
-        <label><input type="checkbox" value="Growth" /> Growth</label>
-        <label><input type="checkbox" value="Contribution" /> Contribution</label>
-        <label><input type="checkbox" value="Learning" /> Learning</label>
-        <label><input type="checkbox" value="Hope" /> Hope</label>
-        <label><input type="checkbox" value="Inspiration" /> Inspiration</label>
-      </div>
+    <div class="card">
+      <h2 class="section-title">Your Past Reflections</h2>
+      <table id="reflectionHistoryTable">
+        <thead>
+          <tr><th>Date</th><th>Reflection</th><th>Needs</th></tr>
+        </thead>
+        <tbody id="reflectionHistoryBody"></tbody>
+      </table>
     </div>
-
-    <div class="category">
-      <h3>Physical Well-being</h3>
-      <div class="needs-grid">
-        <label><input type="checkbox" value="Rest" /> Rest</label>
-        <label><input type="checkbox" value="Safety" /> Safety</label>
-        <label><input type="checkbox" value="Nourishment" /> Nourishment</label>
-        <label><input type="checkbox" value="Movement" /> Movement</label>
-        <label><input type="checkbox" value="Touch" /> Touch</label>
-        <label><input type="checkbox" value="Comfort" /> Comfort</label>
-      </div>
-    </div>
-
-    <button class="submit-button" onclick="submitReflection()">Submit Reflection</button>
-
-    <div class="filters">
-      <button onclick="filterData('7')">Last 7 Days</button>
-      <button onclick="filterData('30')">This Month</button>
-      <button onclick="filterData('all')">Show All</button>
-    </div>
-
-    <div id="wordCloud"></div>
-
-    <table id="entriesTable">
-      <thead>
-        <tr><th>Date</th><th>Reflection</th><th>Needs</th></tr>
-      </thead>
-      <tbody></tbody>
-    </table>
   </div>
 
   <script>
-    function submitReflection() {
-      const reflection = document.getElementById('reflection').value;
-      const checkboxes = document.querySelectorAll('input[type=checkbox]:checked');
-      const needs = Array.from(checkboxes).map(cb => cb.value);
+    const allNeeds = [
+      "Acceptance", "Affection", "Appreciation", "Authenticity", "Autonomy", "Balance",
+      "Belonging", "Care", "Clarity", "Comfort", "Compassion", "Connection", "Consistency",
+      "Contribution", "Creativity", "Dignity", "Ease", "Empathy", "Equality", "Faith",
+      "Freedom", "Fun", "Gratitude", "Growth", "Harmony", "Hope", "Humor", "Inclusion",
+      "Inspiration", "Integrity", "Joy", "Love", "Meaning", "Nourishment", "Order",
+      "Peace", "Play", "Presence", "Purpose", "Recognition", "Respect", "Safety",
+      "Security", "Self-Expression", "Stability", "Support", "Tenderness", "Trust",
+      "Understanding", "Validation", "Warmth"
+    ];
+
+    const checklistDiv = document.getElementById("needsChecklist");
+    const wordCloudDiv = document.getElementById("wordCloud");
+    const tableBody = document.getElementById("reflectionHistoryBody");
+
+    allNeeds.forEach(need => {
+      const label = document.createElement("label");
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.value = need;
+      label.appendChild(checkbox);
+      label.appendChild(document.createTextNode(need));
+      checklistDiv.appendChild(label);
+    });
+
+    function getStoredData() {
+      return JSON.parse(localStorage.getItem("reflections") || "[]");
+    }
+
+    function saveReflection() {
+      const text = document.getElementById("reflectionInput").value.trim();
+      if (!text) return alert("Please write a reflection first.");
+
+      const selected = [...document.querySelectorAll("#needsChecklist input:checked")].map(n => n.value);
+      if (!selected.length) return alert("Please select at least one need.");
+
       const entry = {
         date: new Date().toISOString(),
-        reflection,
-        needs
+        text,
+        needs: selected
       };
-      const previous = JSON.parse(localStorage.getItem('needsReflections') || '[]');
-      previous.push(entry);
-      localStorage.setItem('needsReflections', JSON.stringify(previous));
-      document.getElementById('reflection').value = '';
-      checkboxes.forEach(cb => cb.checked = false);
-      renderData('all');
+      const all = getStoredData();
+      all.unshift(entry);
+      localStorage.setItem("reflections", JSON.stringify(all));
+      document.getElementById("reflectionInput").value = "";
+      document.querySelectorAll("#needsChecklist input").forEach(i => i.checked = false);
+      renderHistory();
     }
 
-    function filterData(range) {
-      renderData(range);
+    function filterByDays(days) {
+      const cutoff = new Date();
+      cutoff.setDate(cutoff.getDate() - days);
+      renderHistory(cutoff);
     }
 
-    function renderData(range) {
-      const data = JSON.parse(localStorage.getItem('needsReflections') || '[]');
-      const tbody = document.querySelector('#entriesTable tbody');
-      tbody.innerHTML = '';
+    function renderHistory(filterDate = null) {
+      const data = getStoredData();
+      tableBody.innerHTML = "";
+      const allWords = {};
+      data.forEach(entry => {
+        const date = new Date(entry.date);
+        if (filterDate && date < filterDate) return;
+        const row = document.createElement("tr");
+        row.innerHTML = `<td>${date.toLocaleDateString()}</td><td>${entry.text}</td><td>${entry.needs.join(", ")}</td>`;
+        tableBody.appendChild(row);
+        entry.needs.forEach(n => allWords[n] = (allWords[n] || 0) + 1);
+      });
 
-      const now = new Date();
-      let filtered = data;
-      if (range !== 'all') {
-        const days = parseInt(range);
-        filtered = data.filter(entry => {
-          const entryDate = new Date(entry.date);
-          const diff = (now - entryDate) / (1000 * 60 * 60 * 24);
-          return diff <= days;
+      if (Object.keys(allWords).length) {
+        WordCloud(wordCloudDiv, {
+          list: Object.entries(allWords),
+          gridSize: 10,
+          weightFactor: 6,
+          color: () => '#' + Math.floor(Math.random()*16777215).toString(16),
+          backgroundColor: "#f7fafc",
         });
+      } else {
+        wordCloudDiv.innerHTML = "No data yet.";
       }
-
-      const words = {};
-
-      filtered.forEach(entry => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${new Date(entry.date).toLocaleDateString()}</td><td>${entry.reflection}</td><td>${entry.needs.join(', ')}</td>`;
-        tbody.appendChild(tr);
-        entry.needs.forEach(need => {
-          words[need] = (words[need] || 0) + 1;
-        });
-      });
-
-      WordCloud(document.getElementById('wordCloud'), {
-        list: Object.entries(words),
-        gridSize: 18,
-        weightFactor: 6,
-        fontFamily: 'Roboto',
-        color: 'random-dark',
-        backgroundColor: '#fff'
-      });
     }
 
-    renderData('all');
+    renderHistory();
   </script>
 </body>
 </html>
+
 
