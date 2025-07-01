@@ -1,34 +1,78 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Needs Inventory</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        .need-button {
-            transition: all 0.3s ease;
-        }
-        .need-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        }
-        .added {
-            background: #e0e7ff;
-            border-color: #6366f1;
-            color: #4f46e5;
-        }
-        .word-cloud-word {
-            display: inline-block;
-            margin: 0.25rem;
-            padding: 0.25rem 0.5rem;
-            border-radius: 0.5rem;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-        .word-cloud-word:hover {
-            transform: scale(1.1);
-        }
-    </style>
-</head>
-<body c
+dayNeeds.forEach(need => {
+                   needCounts[need.name] = (needCounts[need.name] || 0) + 1;
+               });
+           });
+
+           // Sort by frequency
+           const sortedNeeds = Object.entries(needCounts)
+               .sort(([,a], [,b]) => b - a)
+               .slice(0, 15);
+
+           if (sortedNeeds.length === 0) return;
+
+           const maxCount = sortedNeeds[0][1];
+           const wordCloudHtml = sortedNeeds.map(([need, count]) => {
+               const size = Math.max(14, (count / maxCount) * 28 + 14);
+               const opacity = Math.max(0.6, count / maxCount);
+               const hue = Math.floor(Math.random() * 360);
+               
+               return `
+                   <span class="word-cloud-word capitalize" 
+                         style="font-size: ${size}px; opacity: ${opacity}; color: hsl(${hue}, 70%, 50%); background: hsl(${hue}, 70%, 95%);"
+                         title="${need}: appeared ${count} time${count !== 1 ? 's' : ''} this week">
+                       ${need}
+                   </span>
+               `;
+           }).join('');
+
+           document.getElementById('word-cloud').innerHTML = wordCloudHtml;
+       }
+
+       // Toggle summary visibility
+       function toggleSummary() {
+           const content = document.getElementById('summary-content');
+           const toggleText = document.getElementById('summary-toggle-text');
+           
+           if (content.classList.contains('hidden')) {
+               content.classList.remove('hidden');
+               toggleText.textContent = 'Hide Summary';
+           } else {
+               content.classList.add('hidden');
+               toggleText.textContent = 'Show Summary';
+           }
+       }
+
+       // Show toast notification
+       function showToast(message) {
+           const toast = document.getElementById('toast');
+           toast.textContent = message;
+           toast.classList.remove('hidden');
+           
+           setTimeout(() => {
+               toast.classList.add('hidden');
+           }, 3000);
+       }
+
+       // Load saved data on page load
+       window.addEventListener('load', function() {
+           // Load today's needs from localStorage if they exist
+           const today = new Date().toLocaleDateString();
+           const savedTodaysNeeds = weeklyNeeds[today];
+           
+           if (savedTodaysNeeds) {
+               todaysNeeds = savedTodaysNeeds;
+               updateTodaysNeedsDisplay();
+               
+               // Update button states
+               todaysNeeds.forEach(need => {
+                   const buttons = document.querySelectorAll(`button[onclick="addNeed('${need.name}')"]`);
+                   buttons.forEach(btn => {
+                       btn.classList.add('added');
+                       btn.innerHTML = need.name.charAt(0).toUpperCase() + need.name.slice(1) + ' ✓';
+                   });
+               });
+           }
+       });
+   </script>
+</body>
+</html>
