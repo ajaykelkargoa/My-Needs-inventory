@@ -4,70 +4,72 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Needs Reflection Tool</title>
+  <script src="https://cdn.jsdelivr.net/npm/wordcloud@1.2.2/src/wordcloud2.min.js"></script>
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: #f0f4f8;
+      background: #f4f7fa;
       margin: 0;
-      padding: 40px 20px;
+      padding: 20px;
       color: #2d3748;
     }
-
     .container {
       background: white;
-      padding: 30px;
+      padding: 20px;
       border-radius: 12px;
-      max-width: 800px;
+      max-width: 1000px;
       margin: 0 auto;
       box-shadow: 0 2px 12px rgba(0,0,0,0.08);
     }
-
     h1 {
-      font-size: 1.8rem;
       text-align: center;
       margin-bottom: 10px;
+      font-size: 1.8rem;
     }
-
-    p.subtitle {
+    .subtitle {
       text-align: center;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
       font-weight: 300;
       color: #4a5568;
     }
-
+    label {
+      display: block;
+      margin: 20px 0 5px;
+      font-weight: 500;
+    }
     textarea {
       width: 100%;
-      height: 120px;
+      height: 100px;
       padding: 10px;
       border-radius: 8px;
       border: 1px solid #ccc;
       font-size: 1rem;
       resize: vertical;
     }
-
-    label {
-      display: block;
+    .category {
       margin-top: 20px;
-      font-weight: 500;
     }
-
+    .category h3 {
+      margin-bottom: 10px;
+      font-size: 1rem;
+      color: #1a365d;
+      border-left: 4px solid #3182ce;
+      padding-left: 8px;
+    }
     .needs-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 12px;
-      margin-top: 10px;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 10px;
     }
-
     .needs-grid label {
       font-weight: normal;
       display: flex;
       align-items: center;
       gap: 6px;
     }
-
     button {
-      margin-top: 30px;
-      padding: 12px 24px;
+      margin-top: 20px;
+      padding: 10px 20px;
       background: #3182ce;
       border: none;
       border-radius: 8px;
@@ -75,161 +77,148 @@
       font-size: 1rem;
       cursor: pointer;
     }
-
     button:hover {
       background: #2c5282;
     }
-
     .actions {
       margin-top: 20px;
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
     }
-
-    .history {
-      margin-top: 40px;
+    .filters {
+      margin-top: 30px;
+      text-align: center;
     }
-
+    .filters button {
+      background: #e2e8f0;
+      color: #2d3748;
+      font-weight: 500;
+    }
+    .filters button.active {
+      background: #3182ce;
+      color: white;
+    }
+    .history {
+      margin-top: 30px;
+      overflow-x: auto;
+    }
     table {
       width: 100%;
       border-collapse: collapse;
       margin-top: 15px;
+      font-size: 0.9rem;
     }
-
     th, td {
       border: 1px solid #ddd;
       padding: 8px;
-      font-size: 0.95rem;
       text-align: left;
     }
-
     th {
       background: #f0f0f0;
     }
-
     .success {
       color: green;
       margin-top: 15px;
       text-align: center;
       font-weight: 500;
     }
+    #wordCloud {
+      height: 300px;
+      margin-top: 30px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+    }
+    @media (max-width: 600px) {
+      textarea {
+        height: 80px;
+      }
+      .needs-grid {
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      }
+      .filters button {
+        font-size: 0.8rem;
+        padding: 8px 12px;
+      }
+      button {
+        width: 100%;
+        text-align: center;
+      }
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>Needs Reflection</h1>
-    <p class="subtitle">Log what needs showed up for you today and reflect on your patterns.</p>
+    <p class="subtitle">Reflect on your day and notice the emotional needs that showed up.</p>
 
     <label for="reflection">📝 What came up for you today?</label>
     <textarea id="reflection" placeholder="Write your thoughts here..."></textarea>
 
-    <label>🌱 Which needs were active?</label>
-    <div class="needs-grid">
-      <label><input type="checkbox" value="Autonomy"> Autonomy</label>
-      <label><input type="checkbox" value="Belonging"> Belonging</label>
-      <label><input type="checkbox" value="Clarity"> Clarity</label>
-      <label><input type="checkbox" value="Meaning"> Meaning</label>
-      <label><input type="checkbox" value="Rest"> Rest</label>
-      <label><input type="checkbox" value="Support"> Support</label>
-      <label><input type="checkbox" value="Respect"> Respect</label>
-      <label><input type="checkbox" value="Growth"> Growth</label>
+    <div class="category">
+      <h3>🔵 Emotional Safety & Authenticity</h3>
+      <div class="needs-grid">
+        <label><input type="checkbox" value="Belonging"> Belonging</label>
+        <label><input type="checkbox" value="Acceptance"> Acceptance</label>
+        <label><input type="checkbox" value="Validation"> Validation</label>
+        <label><input type="checkbox" value="Being seen"> Being seen</label>
+        <label><input type="checkbox" value="Being understood"> Being understood</label>
+        <label><input type="checkbox" value="Psychological safety"> Psychological safety</label>
+        <label><input type="checkbox" value="Permission to feel"> Permission to feel</label>
+      </div>
     </div>
 
-    <button onclick="saveEntry()">✅ Save Reflection</button>
-    <div class="success" id="confirmation" style="display:none;">Reflection saved ✔</div>
-
-    <div class="actions">
-      <button onclick="exportCSV()">⬇️ Export CSV</button>
-      <button onclick="clearAll()">🗑️ Delete All</button>
+    <div class="category">
+      <h3>🟢 Purpose & Growth</h3>
+      <div class="needs-grid">
+        <label><input type="checkbox" value="Meaning"> Meaning</label>
+        <label><input type="checkbox" value="Creativity"> Creativity</label>
+        <label><input type="checkbox" value="Learning"> Learning</label>
+        <label><input type="checkbox" value="Challenge"> Challenge</label>
+        <label><input type="checkbox" value="Contribution"> Contribution</label>
+        <label><input type="checkbox" value="Purpose"> Purpose</label>
+        <label><input type="checkbox" value="Spiritual connection"> Spiritual connection</label>
+      </div>
     </div>
 
-    <div class="history" id="history">
-      <h2>📜 Reflection History</h2>
-      <table>
-        <thead>
-          <tr><th>Date</th><th>Needs</th><th>Reflection</th></tr>
-        </thead>
-        <tbody id="historyBody"></tbody>
-      </table>
+    <div class="category">
+      <h3>🟡 Connection & Relationships</h3>
+      <div class="needs-grid">
+        <label><input type="checkbox" value="Love"> Love</label>
+        <label><input type="checkbox" value="Empathy"> Empathy</label>
+        <label><input type="checkbox" value="Support"> Support</label>
+        <label><input type="checkbox" value="Trust"> Trust</label>
+        <label><input type="checkbox" value="Closeness"> Closeness</label>
+        <label><input type="checkbox" value="Compassion"> Compassion</label>
+        <label><input type="checkbox" value="Mutuality"> Mutuality</label>
+      </div>
+    </div>
+
+    <div class="category">
+      <h3>🔴 Boundaries & Self-Worth</h3>
+      <div class="needs-grid">
+        <label><input type="checkbox" value="Respect"> Respect</label>
+        <label><input type="checkbox" value="Autonomy"> Autonomy</label>
+        <label><input type="checkbox" value="Boundaries"> Boundaries</label>
+        <label><input type="checkbox" value="Agency"> Agency</label>
+        <label><input type="checkbox" value="Clarity"> Clarity</label>
+        <label><input type="checkbox" value="Dignity"> Dignity</label>
+        <label><input type="checkbox" value="Self-respect"> Self-respect</label>
+      </div>
+    </div>
+
+    <div class="category">
+      <h3>⚪ Energy & Recovery</h3>
+      <div class="needs-grid">
+        <label><input type="checkbox" value="Rest"> Rest</label>
+        <label><input type="checkbox" value="Stillness"> Stillness</label>
+        <label><input type="checkbox" value="Rejuvenation"> Rejuvenation</label>
+        <label><input type="checkbox" value="Play"> Play</label>
+        <label><input type="checkbox" value="Joy"> Joy</label>
+        <label><input type="checkbox" value="Ease"> Ease</label>
+      </div>
     </div>
   </div>
-
-  <script>
-    function getData() {
-      return JSON.parse(localStorage.getItem("reflections") || "[]");
-    }
-
-    function saveData(data) {
-      localStorage.setItem("reflections", JSON.stringify(data));
-    }
-
-    function saveEntry() {
-      const reflection = document.getElementById("reflection").value.trim();
-      const needs = Array.from(document.querySelectorAll('input[type="checkbox"]:checked'))
-                        .map(cb => cb.value);
-
-      if (!reflection && needs.length === 0) {
-        alert("Please write something or select needs.");
-        return;
-      }
-
-      const entry = {
-        date: new Date().toLocaleDateString(),
-        needs,
-        reflection
-      };
-
-      const all = getData();
-      all.push(entry);
-      saveData(all);
-      document.getElementById("reflection").value = "";
-      document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
-      document.getElementById("confirmation").style.display = "block";
-      setTimeout(() => document.getElementById("confirmation").style.display = "none", 2000);
-      loadHistory();
-    }
-
-    function loadHistory() {
-      const all = getData().slice().reverse();
-      const tbody = document.getElementById("historyBody");
-      tbody.innerHTML = "";
-      all.forEach(entry => {
-        const row = document.createElement("tr");
-        row.innerHTML = `<td>${entry.date}</td><td>${entry.needs.join(", ")}</td><td>${entry.reflection}</td>`;
-        tbody.appendChild(row);
-      });
-    }
-
-    function exportCSV() {
-      const all = getData();
-      if (all.length === 0) {
-        alert("No data to export.");
-        return;
-      }
-
-      const csv = [
-        ["Date", "Needs", "Reflection"],
-        ...all.map(d => [d.date, d.needs.join("; "), `"${d.reflection.replace(/"/g, '""')}"`])
-      ].map(r => r.join(",")).join("\n");
-
-      const blob = new Blob([csv], { type: "text/csv" });
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = "needs_reflections.csv";
-      link.click();
-    }
-
-    function clearAll() {
-      if (confirm("Delete all reflections? This cannot be undone.")) {
-        localStorage.removeItem("reflections");
-        loadHistory();
-      }
-    }
-
-    // Load history on page load
-    loadHistory();
-  </script>
 </body>
 </html>
 
