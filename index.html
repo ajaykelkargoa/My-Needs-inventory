@@ -16,10 +16,32 @@
         const { useState, useEffect } = React;
 
         const MyNeedsInventory = () => {
-          // [PASTE THE ENTIRE REACT COMPONENT CODE HERE]
-        };
+          const [todaysNeeds, setTodaysNeeds] = useState([]);
+          const [selectedNeed, setSelectedNeed] = useState(null);
+          const [deepDiveData, setDeepDiveData] = useState({});
+          const [showToast, setShowToast] = useState(false);
+          const [weeklyNeeds, setWeeklyNeeds] = useState({});
+          const [showSummary, setShowSummary] = useState(false);
 
-        ReactDOM.render(<MyNeedsInventory />, document.getElementById('root'));
-    </script>
-</body>
-</html>
+          // CNVC Needs Inventory organized by categories
+          const cnvcNeeds = {
+            autonomy: {
+              title: "Autonomy",
+              icon: "🎯",
+              needs: ["choice", "freedom", "independence", "space", "spontaneity"]
+            },
+            celebration: {
+              title: "Celebration",
+              icon: "🎉",
+              needs: ["celebration", "mourning", "gratitude", "acknowledgment", "recognition"]
+            },
+            integrity: {
+              title: "Integrity",
+              icon: "💎",
+              needs: ["authenticity", "creativity", "meaning", "self-worth", "purpose"]
+            },
+            interdependence: {
+              title: "Interdependence",
+              icon: "🤝",
+              needs: ["acceptance", "appreciation", "closeness", "community", "consideration", "contribution", "emotional safety", "empathy", "inclusion", "intimacy", "love", "mutuality", "nurturing", "respect", "support", "trust", "understanding", "warmth"]
+            },
