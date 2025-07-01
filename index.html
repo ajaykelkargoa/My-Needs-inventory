@@ -1,551 +1,456 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>My Needs Inventory</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Understanding Your Needs - A Coaching Reflection Tool</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-        }
-        .container {
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        }
-        .header {
-            text-align: center;
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            color: white;
-            padding: 30px;
-            border-radius: 15px;
-            margin-bottom: 30px;
-        }
-        .header h1 {
+        * {
             margin: 0;
-            font-size: 2.5rem;
+            padding: 0;
+            box-sizing: border-box;
         }
-        .section {
-            margin-bottom: 30px;
-            padding: 20px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            border-left: 5px solid #4facfe;
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.7;
+            color: #2d3748;
+            background: #fafbfc;
         }
-        .need-button {
-            background: #e9ecef;
-            border: 2px solid #dee2e6;
-            padding: 10px 15px;
-            margin: 5px;
-            border-radius: 8px;
-            cursor: pointer;
-            display: inline-block;
-            transition: all 0.3s ease;
-        }
-        .need-button:hover {
-            background: #4facfe;
-            color: white;
-            transform: translateY(-2px);
-        }
-        .need-button.added {
-            background: #28a745;
-            color: white;
-            border-color: #28a745;
-        }
-        .today-need {
-            background: white;
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 8px;
-            border-left: 4px solid #4facfe;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .deep-dive-btn {
-            background: #4facfe;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 20px;
-            cursor: pointer;
-        }
-        .deep-dive-btn:hover {
-            background: #0056b3;
-        }
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 1000;
-        }
-        .modal-content {
-            background: white;
-            margin: 5% auto;
-            padding: 30px;
-            width: 80%;
-            max-width: 600px;
-            border-radius: 15px;
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-        .close-btn {
-            background: #6c757d;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-right: 10px;
-        }
-        .save-btn {
-            background: #28a745;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .word-cloud {
+
+        .hero {
+            background: linear-gradient(135deg, #e8f4f8 0%, #d1ecf1 100%);
+            color: #2d3748;
+            padding: 80px 20px;
             text-align: center;
-            padding: 20px;
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            border-radius: 10px;
-            margin: 20px 0;
+            position: relative;
         }
-        .word-cloud span {
+
+        .hero-content {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 2.8rem;
+            font-weight: 400;
+            margin-bottom: 20px;
+            line-height: 1.3;
+            color: #1a365d;
+        }
+
+        .hero .subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 35px;
+            color: #4a5568;
+            font-weight: 300;
+        }
+
+        .cta-button {
             display: inline-block;
-            margin: 5px;
-            padding: 5px 10px;
-            background: rgba(255,255,255,0.9);
-            border-radius: 15px;
-            font-weight: bold;
-        }
-        .toast {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: #28a745;
+            background: #3182ce;
             color: white;
-            padding: 15px 20px;
-            border-radius: 5px;
-            display: none;
-            z-index: 1001;
+            padding: 16px 32px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            margin: 0 10px 10px 0;
+            box-shadow: 0 2px 8px rgba(49, 130, 206, 0.2);
         }
-        textarea {
-            width: 100%;
-            padding: 10px;
-            border: 2px solid #dee2e6;
-            border-radius: 5px;
-            margin: 10px 0;
-            font-family: inherit;
+
+        .cta-button:hover {
+            background: #2c5282;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(49, 130, 206, 0.3);
         }
-        .grid {
+
+        .cta-secondary {
+            background: transparent;
+            color: #3182ce;
+            border: 2px solid #3182ce;
+            box-shadow: none;
+        }
+
+        .cta-secondary:hover {
+            background: #3182ce;
+            color: white;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .section {
+            padding: 60px 0;
+        }
+
+        .section:nth-child(even) {
+            background: white;
+        }
+
+        .why-section {
+            text-align: center;
+            padding: 70px 0;
+            background: white;
+        }
+
+        .why-section h2 {
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+            color: #1a365d;
+            font-weight: 400;
+        }
+
+        .why-section .subtitle {
+            font-size: 1.1rem;
+            color: #4a5568;
+            margin-bottom: 50px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            font-weight: 300;
+        }
+
+        .insights-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 10px;
-            margin: 15px 0;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 40px;
+            margin: 50px 0;
+        }
+
+        .insight {
+            text-align: center;
+            padding: 30px 20px;
+            background: #f7fafc;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .insight .icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 20px;
+            background: #e8f4f8;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: #3182ce;
+        }
+
+        .insight h4 {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            color: #1a365d;
+            font-weight: 500;
+        }
+
+        .insight p {
+            color: #4a5568;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .research-callout {
+            background: #f0f9ff;
+            padding: 50px 40px;
+            border-radius: 16px;
+            text-align: center;
+            margin: 50px 0;
+            border-left: 4px solid #3182ce;
+        }
+
+        .research-callout h3 {
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            font-weight: 500;
+            color: #1a365d;
+        }
+
+        .research-callout p {
+            font-size: 1.05rem;
+            color: #4a5568;
+            margin-bottom: 25px;
+            font-style: italic;
+        }
+
+        .research-callout .cta-button {
+            background: #3182ce;
+            color: white;
+            margin-top: 10px;
+        }
+
+        .journey-section {
+            background: #f7fafc;
+            padding: 70px 0;
+        }
+
+        .journey-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .journey-phase {
+            background: white;
+            padding: 30px 25px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            border: 1px solid #e2e8f0;
+        }
+
+        .phase-number {
+            background: #e8f4f8;
+            color: #3182ce;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            margin: 0 auto 20px;
+            font-size: 1.1rem;
+        }
+
+        .journey-phase h4 {
+            font-size: 1rem;
+            margin-bottom: 12px;
+            color: #1a365d;
+            font-weight: 500;
+        }
+
+        .journey-phase p {
+            color: #4a5568;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .final-invitation {
+            background: #1a365d;
+            color: white;
+            padding: 70px 0;
+            text-align: center;
+        }
+
+        .final-invitation h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            font-weight: 400;
+        }
+
+        .final-invitation p {
+            font-size: 1.1rem;
+            margin-bottom: 35px;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        .final-invitation .cta-button {
+            background: #3182ce;
+            color: white;
+            font-size: 1.1rem;
+            padding: 18px 36px;
+        }
+
+        .final-invitation .cta-button:hover {
+            background: #2c5282;
+        }
+
+        .gentle-note {
+            background: #f0f9ff;
+            padding: 30px;
+            border-radius: 12px;
+            margin: 40px 0;
+            border-left: 4px solid #3182ce;
+        }
+
+        .gentle-note p {
+            color: #4a5568;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .hero .subtitle {
+                font-size: 1rem;
+            }
+
+            .cta-button {
+                display: block;
+                margin: 10px auto;
+                text-align: center;
+                max-width: 280px;
+            }
+
+            .insights-grid,
+            .journey-grid {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+
+            .research-callout,
+            .gentle-note {
+                padding: 30px 25px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>📝 My Needs Inventory</h1>
-            <p>Tracking the needs that show up in your daily experience</p>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Understanding Your Needs</h1>
+            <p class="subtitle">You might already sense what matters to you. This simple tool helps you notice patterns in your daily experience that could deepen your self-awareness.</p>
+            <a href="./tool.html" class="cta-button">Explore the Tool</a>
+            <a href="#reflection" class="cta-button cta-secondary">Learn More</a>
         </div>
+    </section>
 
-        <!-- Weekly Summary -->
-        <div id="weekly-summary" class="section" style="display:none;">
-            <h2>☁️ Weekly Needs Summary</h2>
-            <button onclick="toggleSummary()" style="float: right; background: #6f42c1; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer;">
-                <span id="toggle-text">Show Summary</span>
-            </button>
-            <div id="summary-content" style="display:none;">
-                <div class="word-cloud" id="word-cloud"></div>
-            </div>
-            <div style="clear: both;"></div>
-        </div>
+    <!-- Reflection Section -->
+    <section class="why-section" id="reflection">
+        <div class="container">
+            <h2>Why This Reflection Might Be Helpful</h2>
+            <p class="subtitle">Sometimes what we think we need and what's actually showing up in our daily experience are different things. This awareness can be valuable for leadership development.</p>
 
-        <!-- Today's Needs -->
-        <div class="section">
-            <h2>📋 Today's Needs - <span id="current-date"></span></h2>
-            <div id="todays-needs">
-                <div style="text-align: center; padding: 40px; color: #6c757d;">
-                    <p><strong>No needs captured yet today</strong></p>
-                    <p>Browse the Needs Library below to identify needs as they arise</p>
+            <div class="insights-grid">
+                <div class="insight">
+                    <div class="icon">💡</div>
+                    <h4>Pattern Recognition</h4>
+                    <p>Notice which needs consistently appear in your experience, revealing what truly drives your decisions.</p>
+                </div>
+                <div class="insight">
+                    <div class="icon">🎯</div>
+                    <h4>Authentic Leadership</h4>
+                    <p>Understanding your needs helps you lead from a place of clarity rather than reactive patterns.</p>
+                </div>
+                <div class="insight">
+                    <div class="icon">⚖️</div>
+                    <h4>Sustainable Pace</h4>
+                    <p>Awareness of your needs can help prevent burnout and support long-term effectiveness.</p>
+                </div>
+                <div class="insight">
+                    <div class="icon">🤝</div>
+                    <h4>Coaching Conversations</h4>
+                    <p>Rich data for exploring themes and patterns with your coach or in self-reflection.</p>
                 </div>
             </div>
-        </div>
 
-        <!-- Needs Library -->
-        <div class="section">
-            <h2>📚 Universal Needs Library</h2>
-            <p>Click on any need that you notice expressing itself in your day. The goal is to catch needs as they arise, not to analyze whether you "should" have them.</p>
-
-            <h3>🎯 Autonomy</h3>
-            <div class="grid">
-                <button class="need-button" onclick="addNeed('choice')">Choice</button>
-                <button class="need-button" onclick="addNeed('freedom')">Freedom</button>
-                <button class="need-button" onclick="addNeed('independence')">Independence</button>
-                <button class="need-button" onclick="addNeed('space')">Space</button>
-                <button class="need-button" onclick="addNeed('spontaneity')">Spontaneity</button>
-            </div>
-
-            <h3>🎉 Celebration</h3>
-            <div class="grid">
-                <button class="need-button" onclick="addNeed('celebration')">Celebration</button>
-                <button class="need-button" onclick="addNeed('gratitude')">Gratitude</button>
-                <button class="need-button" onclick="addNeed('acknowledgment')">Acknowledgment</button>
-                <button class="need-button" onclick="addNeed('recognition')">Recognition</button>
-                <button class="need-button" onclick="addNeed('mourning')">Mourning</button>
-            </div>
-
-            <h3>💎 Integrity</h3>
-            <div class="grid">
-                <button class="need-button" onclick="addNeed('authenticity')">Authenticity</button>
-                <button class="need-button" onclick="addNeed('creativity')">Creativity</button>
-                <button class="need-button" onclick="addNeed('meaning')">Meaning</button>
-                <button class="need-button" onclick="addNeed('purpose')">Purpose</button>
-                <button class="need-button" onclick="addNeed('self-worth')">Self-worth</button>
-            </div>
-
-            <h3>🤝 Interdependence</h3>
-            <div class="grid">
-                <button class="need-button" onclick="addNeed('acceptance')">Acceptance</button>
-                <button class="need-button" onclick="addNeed('appreciation')">Appreciation</button>
-                <button class="need-button" onclick="addNeed('empathy')">Empathy</button>
-                <button class="need-button" onclick="addNeed('love')">Love</button>
-                <button class="need-button" onclick="addNeed('respect')">Respect</button>
-                <button class="need-button" onclick="addNeed('support')">Support</button>
-                <button class="need-button" onclick="addNeed('trust')">Trust</button>
-                <button class="need-button" onclick="addNeed('understanding')">Understanding</button>
-            </div>
-
-            <h3>🎮 Play</h3>
-            <div class="grid">
-                <button class="need-button" onclick="addNeed('joy')">Joy</button>
-                <button class="need-button" onclick="addNeed('humor')">Humor</button>
-                <button class="need-button" onclick="addNeed('play')">Play</button>
-                <button class="need-button" onclick="addNeed('fun')">Fun</button>
-                <button class="need-button" onclick="addNeed('adventure')">Adventure</button>
-            </div>
-
-            <h3>☮️ Peace</h3>
-            <div class="grid">
-                <button class="need-button" onclick="addNeed('peace')">Peace</button>
-                <button class="need-button" onclick="addNeed('harmony')">Harmony</button>
-                <button class="need-button" onclick="addNeed('order')">Order</button>
-                <button class="need-button" onclick="addNeed('beauty')">Beauty</button>
-                <button class="need-button" onclick="addNeed('ease')">Ease</button>
-            </div>
-
-            <h3>💪 Physical Well-being</h3>
-            <div class="grid">
-                <button class="need-button" onclick="addNeed('rest')">Rest</button>
-                <button class="need-button" onclick="addNeed('movement')">Movement</button>
-                <button class="need-button" onclick="addNeed('safety')">Safety</button>
-                <button class="need-button" onclick="addNeed('nourishment')">Nourishment</button>
-                <button class="need-button" onclick="addNeed('comfort')">Comfort</button>
+            <div class="research-callout">
+                <h3>Research Insight</h3>
+                <p>"The most compassionate people had boundaries of steel. Self-compassion is actually the core of mental toughness."</p>
+                <cite style="font-size: 0.9rem; color: #4a5568;">— Dr. Brené Brown's research findings</cite>
+                <br>
+                <a href="./tool.html" class="cta-button">Try the Reflection Tool</a>
             </div>
         </div>
+    </section>
 
-        <!-- Usage Guide -->
-        <div class="section">
-            <h2>📖 How to Use Your Needs Inventory</h2>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
-                <div>
-                    <h4>Throughout Your Day:</h4>
-                    <ul>
-                        <li>Notice when you feel energized, frustrated, or emotional</li>
-                        <li>Browse the needs library to identify what's alive</li>
-                        <li>Click to add needs to your personal inventory</li>
-                        <li>Don't judge - just capture what's present</li>
-                    </ul>
+    <!-- Journey Section -->
+    <section class="journey-section">
+        <div class="container">
+            <h2 style="text-align: center; margin-bottom: 20px; font-weight: 400; color: #1a365d; font-size: 2rem;">What You Might Notice</h2>
+            <p style="text-align: center; color: #4a5568; margin-bottom: 40px; max-width: 600px; margin-left: auto; margin-right: auto;">Everyone's experience is different, but here's what some people observe when they track their needs consistently:</p>
+            
+            <div class="journey-grid">
+                <div class="journey-phase">
+                    <div class="phase-number">1-3</div>
+                    <h4>First Few Days</h4>
+                    <p>You might start noticing needs you hadn't consciously recognized before. This can feel surprising or relieving.</p>
                 </div>
-                <div>
-                    <h4>For Each Need:</h4>
-                    <ul>
-                        <li>Click "Deep Dive" to explore what the need means</li>
-                        <li>Connect to body signals and emotions</li>
-                        <li>Identify what would meet the need</li>
-                        <li>Choose small steps to honor it</li>
-                    </ul>
+                <div class="journey-phase">
+                    <div class="phase-number">1</div>
+                    <h4>After One Week</h4>
+                    <p>Patterns may begin to emerge. You might see themes in your data that weren't obvious before.</p>
                 </div>
-                <div>
-                    <h4>Weekly Review:</h4>
-                    <ul>
-                        <li>Which needs showed up most frequently?</li>
-                        <li>What patterns do you notice in your inventory?</li>
-                        <li>Which needs are you most/least comfortable with?</li>
-                        <li>How might unmet needs be affecting your leadership?</li>
-                    </ul>
+                <div class="journey-phase">
+                    <div class="phase-number">2</div>
+                    <h4>After Two Weeks</h4>
+                    <p>Decision-making might feel clearer as you become more aware of what you're optimizing for.</p>
+                </div>
+                <div class="journey-phase">
+                    <div class="phase-number">3+</div>
+                    <h4>Ongoing Practice</h4>
+                    <p>Needs awareness could become a natural part of your reflection and decision-making process.</p>
                 </div>
             </div>
-        </div>
-    </div>
 
-    <!-- Deep Dive Modal -->
-    <div id="deepDiveModal" class="modal">
-        <div class="modal-content">
-            <h2>🔍 Deep Dive: <span id="modal-need-name"></span></h2>
-            <div id="modal-content"></div>
-            <div style="margin-top: 20px;">
-                <button class="close-btn" onclick="closeModal()">Close</button>
-                <button class="save-btn" onclick="saveDeepDive()">Save Deep Dive</button>
+            <div class="gentle-note">
+                <p><strong>A gentle note:</strong> There's no "right" way to use this tool. Some people find daily tracking helpful, others prefer to use it when they're feeling stuck or curious. Trust your own rhythm and what feels sustainable for you.</p>
+            </div>
+
+            <div style="text-align: center; margin-top: 40px;">
+                <a href="./tool.html" class="cta-button">Begin if You're Curious</a>
             </div>
         </div>
-    </div>
+    </section>
 
-    <!-- Toast -->
-    <div id="toast" class="toast"></div>
+    <!-- Final Invitation -->
+    <section class="final-invitation">
+        <div class="container">
+            <h2>An Invitation to Explore</h2>
+            <p>If you're curious about what drives your decisions and patterns, this tool might offer some insights. It takes about 30 seconds per day and requires no commitment beyond your own curiosity.</p>
+            <a href="./tool.html" class="cta-button">Start Your Exploration</a>
+        </div>
+    </section>
 
     <script>
-        // Global variables
-        let todaysNeeds = [];
-        let weeklyNeeds = JSON.parse(localStorage.getItem('weeklyNeeds') || '{}');
-        let currentDeepDiveNeed = null;
-
-        // Need descriptions
-        const needDescriptions = {
-            choice: {
-                description: "The ability to freely select from available options without coercion",
-                whenMet: "I feel empowered, confident in my decisions, and aligned with my values",
-                whenUnmet: "I feel trapped, resentful, or like I'm living someone else's life"
-            },
-            freedom: {
-                description: "The capacity to act, speak, or think without hindrance or restraint",
-                whenMet: "I feel liberated, authentic, and able to express myself fully",
-                whenUnmet: "I feel constrained, suppressed, or like I'm wearing a mask"
-            },
-            authenticity: {
-                description: "Being genuine and true to yourself in thoughts, words, and actions",
-                whenMet: "I feel aligned, honest, and comfortable in my own skin",
-                whenUnmet: "I feel fake, conflicted, or like I'm betraying myself"
-            },
-            respect: {
-                description: "Being treated with dignity, consideration, and regard for your worth",
-                whenMet: "I feel honored, valued, and treated with dignity",
-                whenUnmet: "I feel disrespected, diminished, or treated poorly"
-            },
-            support: {
-                description: "Having assistance, encouragement, and backing from others",
-                whenMet: "I feel backed, encouraged, and able to take on challenges",
-                whenUnmet: "I feel alone, unsupported, or like I'm facing everything myself"
-            }
-        };
-
-        // Initialize
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('current-date').textContent = new Date().toLocaleDateString();
-            loadTodaysNeeds();
-            updateWeeklySummary();
+        // Smooth scrolling for internal links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
         });
 
-        // Add need
-        function addNeed(needName) {
-            if (todaysNeeds.find(n => n.name === needName)) {
-                showToast(`"${needName}" already in today's inventory`);
-                return;
-            }
+        // Gentle fade-in animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -30px 0px'
+        };
 
-            const need = {
-                id: Date.now(),
-                name: needName,
-                timestamp: new Date().toLocaleTimeString(),
-                date: new Date().toLocaleDateString()
-            };
-
-            todaysNeeds.push(need);
-            
-            // Update button
-            const buttons = document.querySelectorAll(`button[onclick="addNeed('${needName}')"]`);
-            buttons.forEach(btn => {
-                btn.classList.add('added');
-                btn.innerHTML = needName.charAt(0).toUpperCase() + needName.slice(1) + ' ✓';
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
             });
+        }, observerOptions);
 
-            updateTodaysDisplay();
-            saveToWeekly();
-            showToast(`Added "${needName}" to today's needs`);
-        }
+        // Observe elements for gentle animations
+        document.querySelectorAll('.insight, .journey-phase').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(15px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
 
-        // Update today's display
-        function updateTodaysDisplay() {
-            const container = document.getElementById('todays-needs');
-            
-            if (todaysNeeds.length === 0) {
-                container.innerHTML = `
-                    <div style="text-align: center; padding: 40px; color: #6c757d;">
-                        <p><strong>No needs captured yet today</strong></p>
-                        <p>Browse the Needs Library below to identify needs as they arise</p>
-                    </div>
-                `;
-                return;
-            }
-
-            container.innerHTML = todaysNeeds.map(need => `
-                <div class="today-need">
-                    <div>
-                        <strong style="text-transform: capitalize;">${need.name}</strong>
-                        <div style="color: #6c757d; font-size: 0.9em;">${need.timestamp}</div>
-                    </div>
-                    <button class="deep-dive-btn" onclick="openDeepDive('${need.name}')">Deep Dive</button>
-                </div>
-            `).join('');
-        }
-
-        // Deep dive modal
-        function openDeepDive(needName) {
-            currentDeepDiveNeed = needName;
-            document.getElementById('modal-need-name').textContent = needName;
-            
-            const description = needDescriptions[needName];
-            let content = '<div style="background: #e3f2fd; padding: 15px; border-radius: 8px; margin-bottom: 20px;">';
-            content += '<h3>What this need means:</h3>';
-            
-            if (description) {
-                content += `<p>${description.description}</p>`;
-                content += '<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">';
-                content += `<div style="background: #e8f5e8; padding: 10px; border-radius: 5px;">
-                    <strong>When met:</strong><br>${description.whenMet}
-                </div>`;
-                content += `<div style="background: #ffe8e8; padding: 10px; border-radius: 5px;">
-                    <strong>When unmet:</strong><br>${description.whenUnmet}
-                </div>`;
-                content += '</div>';
-            } else {
-                content += '<p>This is a fundamental human need. Take a moment to reflect on how this need shows up in your life.</p>';
-            }
-            
-            content += '</div>';
-            content += '<div>';
-            content += '<label><strong>What situation triggered this need?</strong></label>';
-            content += '<textarea rows="3" placeholder="Describe the specific situation..."></textarea>';
-            content += '<label><strong>What would meet this need?</strong></label>';
-            content += '<textarea rows="3" placeholder="What would it look like if this need was satisfied?"></textarea>';
-            content += '</div>';
-            
-            document.getElementById('modal-content').innerHTML = content;
-            document.getElementById('deepDiveModal').style.display = 'block';
-        }
-
-        function closeModal() {
-            document.getElementById('deepDiveModal').style.display = 'none';
-            currentDeepDiveNeed = null;
-        }
-
-        function saveDeepDive() {
-            showToast(`Deep dive for "${currentDeepDiveNeed}" saved!`);
-            closeModal();
-        }
-
-        // Save to weekly
-        function saveToWeekly() {
-            const today = new Date().toLocaleDateString();
-            weeklyNeeds[today] = todaysNeeds;
-            localStorage.setItem('weeklyNeeds', JSON.stringify(weeklyNeeds));
-            updateWeeklySummary();
-        }
-
-        // Load today's needs
-        function loadTodaysNeeds() {
-            const today = new Date().toLocaleDateString();
-            if (weeklyNeeds[today]) {
-                todaysNeeds = weeklyNeeds[today];
-                updateTodaysDisplay();
-                
-                // Update button states
-                todaysNeeds.forEach(need => {
-                    const buttons = document.querySelectorAll(`button[onclick="addNeed('${need.name}')"]`);
-                    buttons.forEach(btn => {
-                        btn.classList.add('added');
-                        btn.innerHTML = need.name.charAt(0).toUpperCase() + need.name.slice(1) + ' ✓';
-                    });
-                });
-            }
-        }
-
-        // Update weekly summary
-        function updateWeeklySummary() {
-            const hasData = Object.keys(weeklyNeeds).length > 0;
-            const summarySection = document.getElementById('weekly-summary');
-            
-            if (hasData) {
-                summarySection.style.display = 'block';
-                generateWordCloud();
-            } else {
-                summarySection.style.display = 'none';
-            }
-        }
-
-        // Generate word cloud
-        function generateWordCloud() {
-            const needCounts = {};
-            
-            Object.values(weeklyNeeds).forEach(dayNeeds => {
-                dayNeeds.forEach(need => {
-                    needCounts[need.name] = (needCounts[need.name] || 0) + 1;
-                });
+        // Track interactions for understanding usage patterns
+        document.querySelectorAll('a[href*="tool.html"]').forEach(button => {
+            button.addEventListener('click', function() {
+                // Could integrate with analytics if needed
+                console.log('Tool access from:', this.closest('section').className || 'unknown location');
             });
-
-            const sortedNeeds = Object.entries(needCounts)
-                .sort(([,a], [,b]) => b - a)
-                .slice(0, 10);
-
-            if (sortedNeeds.length === 0) return;
-
-            const maxCount = sortedNeeds[0][1];
-            const wordCloudHtml = sortedNeeds.map(([need, count]) => {
-                const size = Math.max(12, (count / maxCount) * 20 + 12);
-                return `<span style="font-size: ${size}px; text-transform: capitalize;" title="${need}: ${count} times">${need}</span>`;
-            }).join(' ');
-
-            document.getElementById('word-cloud').innerHTML = '<h3>Your Most Frequent Needs This Week</h3>' + wordCloudHtml;
-        }
-
-        // Toggle summary
-        function toggleSummary() {
-            const content = document.getElementById('summary-content');
-            const toggleText = document.getElementById('toggle-text');
-            
-            if (content.style.display === 'none') {
-                content.style.display = 'block';
-                toggleText.textContent = 'Hide Summary';
-            } else {
-                content.style.display = 'none';
-                toggleText.textContent = 'Show Summary';
-            }
-        }
-
-        // Show toast
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.style.display = 'block';
-            
-            setTimeout(() => {
-                toast.style.display = 'none';
-            }, 3000);
-        }
-
-        // Close modal when clicking outside
-        window.onclick = function(event) {
-            const modal = document.getElementById('deepDiveModal');
-            if (event.target == modal) {
-                closeModal();
-            }
-        }
+        });
     </script>
 </body>
 </html>
